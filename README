@@ -1,8 +1,64 @@
 This is the source tree of U-Boot, a popular boot loader for embedded devices. U-Boot was developed by DENX Software Engineering (www.denx.de).
 
-This particular version of U-Boot is maintained by Emcraft Systems and supports several Cortex-M3 and Cortex-M4 based MCUs.
+It is intended to support SPANSION Cortex-M3 FM3 CPU. 
+It is based on EmcraftSystems/u-boot implementation. Thank you very much.
 
-A complete list of Cortex-M MCUs and boards supported by this version of U-Boot is available at http://www.emcraft.com.
+[Supported configuration]
 
-If you want to contribute code to this source tree, please email your patches to a2f-linux-support@emcraft.com.
+The following boards are supported.
+- CQ_FRK_FM3 (CPU board) + LFCQ1 (4MB) + WKFM3 (Network board)
+- CQ_FRK_FM3 (CPU board) + WXMP3PLCD_FL (2MB)+ WXPHY (Network board)
+
+CQ_FRK_FM3 is a board released by CQ Publishing in Japan, using MB9BF618T CPU (FM3 type2).
+The board is bundled with the magazine of "Interface" Jun-2012 edition.
+Product	  (http://www.kumikomi.net/interface/contents/201206.php)
+Schematic (http://www.kumikomi.net/interface/editors/CQ-FRK-FM3_schematic.pdf)
+
+LFCQ1 is a memory board, which is released by l-and-f corp. (http://www.l-and-f.co.jp)
+Product		(http://www.l-and-f.co.jp/seihin/LF/LFCQ1%282%29.htm)
+
+WKFM3 is a network board for "CQ_FRK_FM3" board which is released by WAKAMATSU TSUSHO.
+Product		(http://www.wakamatsu-net.com/cgibin/biz/pageshousai.cgi?code=38310029&CATE=3831)
+Schematic	(http://www.wakamatsu-net.com/biz/wkfm3_s.pdf)
+
+WXMP3PLCD_FL is a memory board, which is released by WILL Electronics.
+Product		(http://homepage3.nifty.com/fpga/files/board/WX-MP3PLCD-FL/)
+Schematic	(http://homepage3.nifty.com/fpga/files/board/WX-MP3PLCD-FL/mp3p_lcd_fm3_sch.pdf)
+
+[Boot menu]
+
+U-Boot 2010.03-00017-g2fa4d6c-dirty (Jun 08 2014 - 14:17:42)
+
+CPU  : Fujitsu FM3 series (Cortex-M3)
+Board: CQ_FRK_FM3 + LFCQ1 Rev Rev 0.1, Kentaro Sekimoto
+DRAM:   4 MB
+Flash:  1 MB
+
+In:    serial
+Out:   serial
+Err:   serial
+Net:   fm3_eth
+
+[Prerequisites]
+
+- Prepare ARM toolchain (such as SourceryG++)
+- Linux or Windows (MINGW)
+
+[Build]
+
+- Set CROSS_COMPILE and others
+
+export PATH=/C/cross/arm-2013.05/bin:$PATH
+export CROSS_COMPILE=arm-none-eabi-
+export ARCH=arm
+
+- Make
+
+make distclean
+make cq_frk_fm3_lfcq1_config (or cq_frk_fm3_wxmp3plcd_config)
+make 
+
+
+
+
 
