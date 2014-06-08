@@ -46,16 +46,16 @@ if [ "$SRCTREE" != "$OBJTREE" ] ; then
 	LNPREFIX="../../include2/asm/"
 	cd ../include
 	rm -rf asm-$2
-	rm -f asm
+	rm -rf asm
 	mkdir asm-$2
 	ln -s asm-$2 asm
 else
 	cd ./include
-	rm -f asm
+	rm -rf asm
 	ln -s asm-$2 asm
 fi
 
-rm -f asm-$2/arch
+rm -rf asm-$2/arch
 
 if [ -z "$6" -o "$6" = "NULL" ] ; then
 	ln -s ${LNPREFIX}arch-$3 asm-$2/arch
@@ -64,7 +64,7 @@ else
 fi
 
 if [ "$2" = "arm" ] ; then
-	rm -f asm-$2/proc
+	rm -rf asm-$2/proc
 	ln -s ${LNPREFIX}proc-armv asm-$2/proc
 fi
 

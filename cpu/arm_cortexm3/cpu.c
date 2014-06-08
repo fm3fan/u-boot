@@ -70,6 +70,10 @@ int arch_cpu_init(void)
 	gd->bd->bi_arch_number = MACH_TYPE_KINETIS;
 #elif defined(CONFIG_SYS_M2S)
 	gd->bd->bi_arch_number = MACH_TYPE_M2S;
+#elif defined(CONFIG_SYS_FM3)
+    gd->bd->bi_arch_number = MACH_TYPE_FM3;
+#elif defined(CONFIG_SYS_FM4)
+    gd->bd->bi_arch_number = MACH_TYPE_FM4;
 #else
 # error "Unsupported Cortex-M3 SOC."
 #endif

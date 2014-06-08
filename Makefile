@@ -3310,6 +3310,36 @@ m2s-fg484-som_config :  unconfig
 m2s-som-copy2_config :  unconfig
 	@$(MKCONFIG) $(@:_config=) arm arm_cortexm3 m2s-som emcraft m2s
 
+cq_frk_fm3_config : unconfig
+	@$(MKCONFIG) $(@:_config=) arm arm_cortexm3 cq_frk_fm3 cq fm3
+
+cq_frk_fm3_lfcq1_config : unconfig
+	@echo "LDSCRIPT:=$(SRCTREE)/board/cq/cq_frk_fm3_lfcq1/u-boot.lds"\
+		> $(obj)board/cq/cq_frk_fm3_lfcq1/config.tmp
+	@$(MKCONFIG) $(@:_config=) arm arm_cortexm3 cq_frk_fm3_lfcq1 cq fm3
+
+cq_frk_fm3_lfcq1_usb_config : unconfig
+	@echo "LDSCRIPT:=$(SRCTREE)/board/cq/cq_frk_fm3_lfcq1/u-boot-exsram.lds"\
+		> $(obj)board/cq/cq_frk_fm3_lfcq1/config.tmp
+	@$(MKCONFIG) $(@:_config=) arm arm_cortexm3 cq_frk_fm3_lfcq1 cq fm3
+
+cq_frk_fm3_wxmp3plcd_config : unconfig
+	@$(MKCONFIG) $(@:_config=) arm arm_cortexm3 cq_frk_fm3_wxmp3plcd cq fm3
+
+ks_mb9bf506_config : unconfig
+	@$(MKCONFIG) $(@:_config=) arm arm_cortexm3 ks_mb9bf506 ks fm3
+
+ks_mb9bf568_config : unconfig
+	@$(MKCONFIG) $(@:_config=) arm arm_cortexm3 ks_mb9bf568 ks fm4
+
+ks_mb9bf568_sdram_config : unconfig
+	@echo "LDSCRIPT:=$(SRCTREE)/board/ks/ks_mb9bf568/u-boot-sdram.lds"\
+		> $(obj)board/ks/ks_mb9bf568/config.tmp
+	@$(MKCONFIG) $(@:_config=) arm arm_cortexm3 ks_mb9bf568 ks fm4
+
+wx_mp3plcd_f_config : unconfig
+	@$(MKCONFIG) $(@:_config=) arm arm_cortexm3 wx_mp3plcd_f will fm3
+
 #########################################################################
 ## XScale Systems
 #########################################################################
@@ -3905,7 +3935,7 @@ clobber:	clean
 	@rm -f $(obj)u-boot.imx
 	@rm -f $(obj)tools/{env/crc32.c,inca-swap-bytes}
 	@rm -f $(obj)cpu/mpc824x/bedbug_603e.c
-	@rm -f $(obj)include/asm/proc $(obj)include/asm/arch $(obj)include/asm
+	@rm -rf $(obj)include/asm/proc $(obj)include/asm/arch $(obj)include/asm
 	@[ ! -d $(obj)nand_spl ] || find $(obj)nand_spl -name "*" -type l -print | xargs rm -f
 	@[ ! -d $(obj)onenand_ipl ] || find $(obj)onenand_ipl -name "*" -type l -print | xargs rm -f
 

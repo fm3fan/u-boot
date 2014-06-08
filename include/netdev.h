@@ -90,6 +90,7 @@ int stm32_eth_init(bd_t *bis);
 int lpc178x_eth_driver_init(bd_t *bis);
 int lpc18xx_eth_driver_init(bd_t *bis);
 int m2s_eth_driver_init(bd_t *bis);
+int fm3_eth_driver_init(bd_t *bis);
 
 /* Boards with PCI network controllers can call this from their board_eth_init()
  * function to initialize whatever's on board.

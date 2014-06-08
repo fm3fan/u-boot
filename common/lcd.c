@@ -57,10 +57,20 @@
 #include <ili932x.h>
 #endif
 
+#if defined(CONFIG_LCD_ST7781)
+#include <st7781.h>
+#define NOT_USED_SO_FAR
+void st7781_scrollup(u16 fwx, u16 fwy, u16 bgcol);
+#endif
+
 /************************************************************************/
 /* ** FONT DATA								*/
 /************************************************************************/
+#if defined(CONFIG_LCD_ST7781)
+#include <font6x12.h>
+#else
 #include <video_font.h>		/* Get font data, width and height	*/
+#endif
 
 /************************************************************************/
 /* ** LOGO DATA								*/
@@ -103,11 +113,15 @@ static int lcd_getfgcolor (void);
 
 static void console_scrollup (void)
 {
+#if defined(CONFIG_LCD_ST7781)
+	st7781_scrollup(VIDEO_FONT_WIDTH, VIDEO_FONT_HEIGHT, lcd_getbgcolor());
+#else
 	/* Copy up rows ignoring the first one */
 	memcpy (CONSOLE_ROW_FIRST, CONSOLE_ROW_SECOND, CONSOLE_SCROLL_SIZE);
 
 	/* Clear the last one */
 	memset (CONSOLE_ROW_LAST, COLOR_MASK(lcd_color_bg), CONSOLE_ROW_SIZE);
+#endif
 }
 
 /*----------------------------------------------------------------------*/
@@ -269,10 +283,18 @@ static void lcd_drawchars (ushort x, ushort y, uchar *str, int count)
 
 static inline void lcd_puts_xy (ushort x, ushort y, uchar *s)
 {
+#if defined(CONFIG_LCD_ST7781)
+	while (*s) {
+		st7781_putc_xyc(*s, (u8 *)video_fontdata, VIDEO_FONT_WIDTH, VIDEO_FONT_HEIGHT, x, y, lcd_getfgcolor(), lcd_getbgcolor());
+		x++;
+		s++;
+	}
+#else
 #if defined(CONFIG_LCD_LOGO) && !defined(CONFIG_LCD_INFO_BELOW_LOGO)
 	lcd_drawchars (x, y+BMP_LOGO_HEIGHT, s, strlen ((char *)s));
 #else
 	lcd_drawchars (x, y, s, strlen ((char *)s));
+#endif
 #endif
 }
 
@@ -280,10 +302,14 @@ static inline void lcd_puts_xy (ushort x, ushort y, uchar *s)
 
 static inline void lcd_putc_xy (ushort x, ushort y, uchar c)
 {
+#if defined(CONFIG_LCD_ST7781)
+		st7781_putc_xyc(c, (u8 *)video_fontdata, VIDEO_FONT_WIDTH, VIDEO_FONT_HEIGHT, x, y, lcd_getfgcolor(), lcd_getbgcolor());
+#else
 #if defined(CONFIG_LCD_LOGO) && !defined(CONFIG_LCD_INFO_BELOW_LOGO)
 	lcd_drawchars (x, y+BMP_LOGO_HEIGHT, &c, 1);
 #else
 	lcd_drawchars (x, y, &c, 1);
+#endif
 #endif
 }
 
@@ -391,11 +417,15 @@ static int lcd_clear (cmd_tbl_t * cmdtp, int flag, int argc, char *argv[])
 #endif
 	/* Paint the logo and retrieve LCD base address */
 	debug ("[LCD] Drawing the logo...\n");
+#ifndef CONFIG_LCD_INFO
 	lcd_console_address = lcd_logo ();
-
+#endif
 	console_col = 0;
 	console_row = 0;
 
+#ifdef CONFIG_LCD_INFO
+	lcd_console_address = lcd_logo ();
+#endif
 	return (0);
 }
 
@@ -419,11 +449,11 @@ static int lcd_init (void *lcdbase)
 
 	/* Initialize the console */
 	console_col = 0;
-#ifdef CONFIG_LCD_INFO_BELOW_LOGO
-	console_row = 7 + BMP_LOGO_HEIGHT / VIDEO_FONT_HEIGHT;
-#else
-	console_row = 1;	/* leave 1 blank line below logo */
-#endif
+//#ifdef CONFIG_LCD_INFO_BELOW_LOGO
+//	console_row = 7 + BMP_LOGO_HEIGHT / VIDEO_FONT_HEIGHT;
+//#else
+//	console_row = 1;	/* leave 1 blank line below logo */
+//#endif
 
 	return 0;
 }

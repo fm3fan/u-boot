@@ -131,6 +131,12 @@ typedef volatile unsigned char	vu_char;
 #ifdef CONFIG_SYS_KINETIS
 #include <asm/arch-kinetis/kinetis.h>
 #endif
+#ifdef CONFIG_SYS_FM3
+#include <asm/arch-fm3/fm3.h>
+#endif
+#ifdef CONFIG_SYS_FM4
+#include <asm/arch-fm4/fm4.h>
+#endif
 
 #include <part.h>
 #include <flash.h>

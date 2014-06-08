@@ -25,6 +25,10 @@
 #include <asm/arch/lpc18xx_gpio.h>
 #endif
 
+#ifdef CONFIG_UBOOT_ON_SDRAM
+void sdram_init(void);
+#endif
+
  /*
  * FIXME: move to the appropriate header
  */
@@ -74,6 +78,12 @@ static inline void __attribute__((used)) __disable_irq(void)
 	asm volatile ("cpsid i");
 }
 
+#if defined(CONFIG_USB_FM3)
+void __attribute__ ((interrupt)) fm3_usbh_int(void);
+#endif
+#if defined(CONFIG_USB_FM4)
+void __attribute__ ((interrupt)) fm4_usbh_int(void);
+#endif
 /*
  * Exception-processing vectors:
  */
@@ -93,7 +103,24 @@ unsigned int vectors[] __attribute__((section(".vectors"))) = {
 	/*
 	 * Other exceptions
 	 */
+#ifdef CONFIG_SYS_FM3
+#ifdef CONFIG_USB_FM3
+    [2 ... 52] = (unsigned int)&default_isr,
+    [53] = (unsigned int)&fm3_usbh_int,
+    [54 ... 165] = (unsigned int)&default_isr
+#else
 	[2 ... 165]	= (unsigned int)&default_isr
+#endif
+#endif
+#ifdef CONFIG_SYS_FM4
+#ifdef CONFIG_USB_FM4
+    [2 ... 94] = (unsigned int)&default_isr,
+    [95] = (unsigned int)&fm4_usbh_int,
+    [96 ... 165] = (unsigned int)&default_isr
+#else
+	[2 ... 165]	= (unsigned int)&default_isr
+#endif
+#endif
 };
 
 #ifdef CONFIG_LPC18XX_NORFLASH_BOOTSTRAP_WORKAROUND
@@ -139,6 +166,9 @@ void
 	lpc18xx_bootstrap_from_norflash();
 #endif /* CONFIG_LPC18XX_NORFLASH_BOOTSTRAP_WORKAROUND */
 
+#ifdef CONFIG_UBOOT_ON_SDRAM
+	sdram_init();
+#endif
 	/*
 	 * Copy data and initialize BSS
 	 * This is in lieu of the U-boot "conventional" relocation

@@ -299,7 +299,11 @@ int saveenv(void)
 #else
 	/* this is the last sector, and the size is hardcoded here */
 	/* otherwise we will get stack problems on loading 128 KB environment */
+#if defined(MB9BF568R)
+	end_addr = flash_sect_addr + 0x10000 - 1;
+#else
 	end_addr = flash_sect_addr + 0x20000 - 1;
+#endif
 #endif
 
 	debug ("Protect off %08lX ... %08lX\n",

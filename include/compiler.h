@@ -43,6 +43,11 @@ extern int errno;
 #define O_BINARY	0
 #endif
 
+#ifdef __MINGW32__
+typedef unsigned long ulong;
+typedef unsigned int  uint;
+#endif
+
 #ifdef __linux__
 # include <endian.h>
 # include <byteswap.h>

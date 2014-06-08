@@ -42,6 +42,9 @@ COBJS-$(CONFIG_USB_EHCI_KIRKWOOD) += ehci-kirkwood.o
 COBJS-$(CONFIG_USB_EHCI_PCI) += ehci-pci.o
 COBJS-$(CONFIG_USB_EHCI_VCT) += ehci-vct.o
 
+COBJS-$(CONFIG_USB_FM3) += fm3_usbhost.o
+COBJS-$(CONFIG_USB_FM4) += fm4_usbhost.o
+
 COBJS	:= $(COBJS-y)
 SRCS	:= $(COBJS:.o=.c)
 OBJS	:= $(addprefix $(obj),$(COBJS))
